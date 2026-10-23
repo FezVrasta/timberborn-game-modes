@@ -1,0 +1,16 @@
+Name: Game Modes
+Logo: Media/cover.png (1920x1080)
+Tags: Mod, Update 1.1, UI
+Homepage URL: https://steamcommunity.com/sharedfiles/filedetails/?id=3825079306
+
+Summary:
+A game mode picker on the New Game screens, for mods that add ways to play. On its own it changes nothing.
+
+Description:
+A game mode picker on the New Game screens, for mods that add ways to play.
+
+On its own it changes nothing: with no mod adding a mode, New Game is the game's own. Mods like BeaverBuddies Co-Op/PvP Edition and Timber Empires add theirs, and each mode comes with its own line about what it plays like.
+
+FOR MOD AUTHORS
+
+Add a mode with GameModes.Modes.Add(id, labelLocKey), describe it with Describe, and read the pick as the game loads with Modes.Game. Rules for a mode go in the Customize list as typed settings (toggle, choice, slider, list) defined with GameSettings.Group, saved with the game and shown in the Load Game box. Source and details: https://github.com/FezVrasta/timberborn-game-modes

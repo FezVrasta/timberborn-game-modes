@@ -16,9 +16,8 @@ set -euo pipefail
 # ---- This repo ---------------------------------------------------------------
 id="GameModes"
 title="Game Modes"
-# No mod.io page yet: set these to its game and mod ids to upload there too
 modio_game=3659
-modio_mod=
+modio_mod=6472457
 changelog="GameModes/changelog.txt"
 # -----------------------------------------------------------------------------
 
