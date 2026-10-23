@@ -1,3 +1,7 @@
+v1.1.0-1.1.0
+* Mods can add their own game settings to the Customize list on the New Game screens.
+* The Load Game box shows a save's game mode and settings.
+
 v1.1.0-1.0.0
 * First release.
 
