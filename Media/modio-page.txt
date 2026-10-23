@@ -1,6 +1,6 @@
 Name: Game Modes
 Logo: Media/cover.png (1920x1080)
-Tags: Mod, Update 1.1, UI
+Tags: Mod, Update 1.1, Other
 Homepage URL: https://steamcommunity.com/sharedfiles/filedetails/?id=3825079306
 
 Summary:
