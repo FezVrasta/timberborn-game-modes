@@ -145,6 +145,14 @@ namespace GameModes
         public static string Label(ILoc loc, string id) => Get(id)?.Label(loc) ?? id;
 
         private static readonly Dictionary<bool, string> PickedFor = new();
+        private static readonly Dictionary<bool, string> Defaults = new();
+
+        /**
+         * The mode picked until the player picks one, for games alone or with others: otherwise the first mode
+         * added, which depends on which mod loads first. A mod whose mode should come up first (a multiplayer
+         * mod's, for games with others) says so.
+         */
+        public static void SetDefault(string id, bool alone) => Defaults[alone] = id;
 
         /** What this player picked last time for a game alone or with others, or the first mode offered. */
         public static string PickedMode(bool alone)
@@ -156,7 +164,8 @@ namespace GameModes
                 id = PlayerPrefs.GetString(PrefsKey(alone), null);
                 PickedFor[alone] = id;
             }
-            return offered.Any(m => m.Id == id) ? id : offered[0].Id;
+            if (offered.Any(m => m.Id == id)) return id;
+            return Defaults.TryGetValue(alone, out string preferred) && offered.Any(m => m.Id == preferred) ? preferred : offered[0].Id;
         }
 
         public static void Pick(string id, bool alone)

@@ -18,6 +18,8 @@ GameModes.Modes.Describe("mymod.race", "MyMod.GameMode.Race.Description");
 GameModes.Modes.DescribeAlone("mymod.race", "MyMod.GameMode.Race.Description.Alone");
 ```
 
+`Modes.SetDefault(id, alone: false)` says which mode is picked until the player picks one, since otherwise it's the first added, which depends on which mod loads first.
+
 A mode shows on the page when it's offered for what the page is making (a game alone, or with others, see `PageAlone`), and the column shows once there are two to pick from. The new game's mode is read while it loads:
 
 | | |
