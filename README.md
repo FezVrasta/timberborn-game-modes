@@ -2,7 +2,7 @@
 
 ![Game Modes](Media/cover.png)
 
-A game mode picker for Timberborn's New Game screens, for mods that add ways to play.
+Game modes, game settings and a saved record of how a game was made, for mods that change how Timberborn plays.
 
 On its own it changes nothing: with no mod adding a mode, New Game is the game's own. [BeaverBuddies Co-Op/PvP Edition](https://github.com/FezVrasta/BeaverBuddies-CoOp-PvP-Edition) and [Timber Empires](https://steamcommunity.com/sharedfiles/filedetails/?id=3814012422) add theirs.
 

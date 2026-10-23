@@ -11,6 +11,7 @@
 # release zip to mod.io when there's a token for it. It refuses when the
 # installed version isn't the one the changelog's newest entry is for: run
 # release.sh first.
+# SKIP_MODIO=1 leaves mod.io out, to update only the Workshop item (a changed description, say)
 set -euo pipefail
 
 # ---- This repo ---------------------------------------------------------------
@@ -51,7 +52,7 @@ printf '%s\n' "$note"
 
 rm -f "$result"
 zip=$(ls -t "$HOME"/Downloads/$id-[0-9]*.zip 2>/dev/null | head -1 || true)
-[ -s "$HOME/.config/timberborn-mod-uploader/modio-token" ] && [ -n "$modio_mod" ] || zip=""
+[ -s "$HOME/.config/timberborn-mod-uploader/modio-token" ] && [ -n "$modio_mod" ] && [ -z "${SKIP_MODIO:-}" ] || zip=""
 python3 - "$flag" "$id" "$note" "$zip" "$version" "$modio_game" "$modio_mod" "$title" "$timberborn/Mods/$id/workshop_data.json" <<'PY'
 import json, os, sys
 flag, mod, note, zip, version, game, modio, title, data = sys.argv[1:]
