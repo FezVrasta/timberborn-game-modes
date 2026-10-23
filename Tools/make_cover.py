@@ -130,11 +130,11 @@ def drawing():
                 pic.line((cx - 2.8 * d - 3 * d, 46.8), (cx - 2.8 * d + 3 * d, 51.2), w=2.4)
                 pic.line((cx - 6 * d, 52), (cx - 8 * d, 55), w=3)
         # The card's name, as a stroke
-        g.line((cx - 7, 63), (cx + 7, 63), w=3.2 if picked else 2.4)
+        g.line((cx - 7, 60), (cx + 7, 60), w=3.2 if picked else 2.4)
         if picked:
             # A second outline inside, and the check on the corner
             g.line((left + 3, top + 3), (right - 3, top + 3), (right - 3, bottom - 3), (left + 3, bottom - 3), (left + 3, top + 3), taper=False, w=1.5)
-            g.line((cx - 4, 70), (cx - 1, 73), (cx + 5, 67.5), w=2.8)
+            g.line((cx - 4, 65.5), (cx - 1.5, 68.5), (cx + 4, 63), w=2.6)
     return g, fill
 
 
