@@ -76,6 +76,23 @@ def background():
     return img
 
 
+class Scaled:
+    """A glyph's drawing calls, with the points pulled in towards (cx, cy) so a picture clears its card's borders."""
+
+    def __init__(self, g, cx, cy, k):
+        self.g, self.cx, self.cy, self.k = g, cx, cy, k
+
+    def _p(self, pt):
+        return (self.cx + (pt[0] - self.cx) * self.k, self.cy + (pt[1] - self.cy) * self.k)
+
+    def line(self, *pts, **kw):
+        self.g.line(*[self._p(p) for p in pts], **kw)
+
+    def circle(self, x, y, r, w):
+        px, py = self._p((x, y))
+        self.g.circle(px, py, r * self.k, w=w)
+
+
 def figure(g, x, y, w=2.8):
     """A settler standing with its feet at y, 20 high."""
     g.circle(x, y - 17, 3.6, w=w)
@@ -90,27 +107,28 @@ def drawing():
     g = mi.Glyph()
     top, bottom = 24, 76
     fill = []
-    for n, (left, right) in enumerate(((6, 31), (37.5, 62.5), (69, 94))):
+    for n, (left, right) in enumerate(((5, 32), (36.5, 63.5), (68, 95))):
         picked = n == 1
         cx = (left + right) / 2
         g.line((left, top), (right, top), (right, bottom), (left, bottom), (left, top), taper=False, w=3.2 if picked else 2.4)
         fill.append([(left, top), (right, top), (right, bottom), (left, bottom)])
+        pic = Scaled(g, cx, 47, 0.8)
         # Its picture: Co-op, two settlers side by side holding hands; PvE, a settler and a bandit camp; PvP, crossed swords
         if n == 0:
-            figure(g, cx - 6.5, 55)
-            figure(g, cx + 6.5, 55)
-            g.line((cx - 6.5, 47.5), (cx + 6.5, 47.5), w=2.6)
+            figure(pic, cx - 8, 55)
+            figure(pic, cx + 8, 55)
+            pic.line((cx - 8, 47.5), (cx + 8, 47.5), w=2.6)
         elif n == 1:
-            figure(g, cx - 7, 55)
-            g.line((cx - 7, 47.5), (cx - 3, 47.5), w=2.6)
-            g.line((cx - 1, 55), (cx + 4.5, 40), (cx + 10, 55), (cx - 1, 55), taper=False, w=2.6)
-            g.line((cx + 4.5, 40), (cx + 4.5, 36), (cx + 8.5, 37.5), w=2.2)
+            figure(pic, cx - 7, 55)
+            pic.line((cx - 7, 47.5), (cx - 3, 47.5), w=2.6)
+            pic.line((cx - 1, 55), (cx + 4.5, 40), (cx + 10, 55), (cx - 1, 55), taper=False, w=2.6)
+            pic.line((cx + 4.5, 40), (cx + 4.5, 36), (cx + 8.5, 37.5), w=2.2)
         else:
             for d in (-1, 1):
                 # A blade from the top corner down to its hilt, with the guard across and the grip past it
-                g.line((cx + 9 * d, 33), (cx - 6 * d, 52), w=2.8)
-                g.line((cx - 2.8 * d - 3 * d, 46.8), (cx - 2.8 * d + 3 * d, 51.2), w=2.4)
-                g.line((cx - 6 * d, 52), (cx - 8 * d, 55), w=3)
+                pic.line((cx + 9 * d, 33), (cx - 6 * d, 52), w=2.8)
+                pic.line((cx - 2.8 * d - 3 * d, 46.8), (cx - 2.8 * d + 3 * d, 51.2), w=2.4)
+                pic.line((cx - 6 * d, 52), (cx - 8 * d, 55), w=3)
         # The card's name, as a stroke
         g.line((cx - 7, 63), (cx + 7, 63), w=3.2 if picked else 2.4)
         if picked:
