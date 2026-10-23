@@ -1,0 +1,11 @@
+{
+  "Name": "Hello Mode",
+  "Version": "1.0.0",
+  "Id": "hellomode",
+  "MinimumGameVersion": "1.1.0.0",
+  "Description": "A sample of how to add a game mode with the Game Modes mod: the Hello game mode, with one game setting, that greets you when the game starts.",
+  "RequiredMods": [
+    { "Id": "Harmony" },
+    { "Id": "gamemodes", "MinimumVersion": "1.1.0-1.2.0" }
+  ]
+}

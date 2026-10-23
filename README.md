@@ -8,6 +8,8 @@ On its own it changes nothing: with no mod adding a mode, New Game is the game's
 
 ## For mod authors
 
+[Samples/HelloMode](Samples/HelloMode) is a small mod that adds a game mode with a game setting, and reads them as the game loads.
+
 Depend on it in your manifest (`{ "Id": "gamemodes" }`), reference `GameModes.dll` and register your modes when the game starts:
 
 ```csharp
@@ -30,6 +32,16 @@ A mode shows on the page when it's offered for what the page is making (a game a
 A mod that starts games with others (multiplayer) sets `Modes.PageAlone` to say when the page is for one, and starts it with `Modes.StartWith(mode, alone: false)`. `GameModeColumn.Column` and `GameModeColumn.Button` build more columns that look like the difficulties'.
 
 `Classic` (`gamemodes.classic`) is the game as it comes, offered for games alone.
+
+## Backgrounds
+
+A mode can have a picture behind the New Game screens while it's picked, and behind the loading screen of a game in it:
+
+```csharp
+Modes.SetBackground("mymod.race", menu: () => pathToJpg, loading: () => pathToJpg);
+```
+
+Each is a function returning an image file's path when the screen shows (null for none), so the picture can change with the date or a setting. `Backgrounds.Show(element, path)` puts a picture on a screen's background element yourself, for screens a mod draws over (a hosting box, say). See [Samples/HelloMode](Samples/HelloMode).
 
 ## Game settings
 

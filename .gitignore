@@ -372,3 +372,6 @@ FodyWeavers.xsd
 .claude/
 Media/open-matches-review/
 GameModes/env.props
+Samples/HelloMode/env.props
+Samples/*/bin/
+Samples/*/obj/

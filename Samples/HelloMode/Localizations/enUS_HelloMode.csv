@@ -1,0 +1,9 @@
+ID,Text,Comment
+HelloMode.GameMode.Hello,"Hello","Hello"
+HelloMode.GameMode.Hello.Description,"A sample mode: the game greets you when it starts.","A sample mode: the game greets you when it starts."
+HelloMode.Settings,"Hello Mode","Hello Mode"
+HelloMode.Settings.Greeting,"Greeting","Greeting"
+HelloMode.Settings.Greeting.Tooltip,"What the game says when it starts.","What the game says when it starts."
+HelloMode.Settings.Greeting.hello,"Hello","Hello"
+HelloMode.Settings.Greeting.hi,"Hi","Hi"
+HelloMode.Settings.Greeting.hey,"Hey","Hey"

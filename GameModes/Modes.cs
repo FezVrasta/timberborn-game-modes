@@ -19,6 +19,10 @@ namespace GameModes
         // Where it's offered: alone (the game's own Start), with others (a mod's own way to start one), or both
         public bool Alone = true;
         public bool WithOthers = true;
+        // The picture behind the New Game screens while it's picked, and behind the loading screen of a game in it,
+        // each the path of an image file, or null for none (see Modes.SetBackground)
+        public Func<string> MenuPicture;
+        public Func<string> LoadingPicture;
 
         public string Label(ILoc loc) => loc.T(LabelLocKey);
 
@@ -107,6 +111,19 @@ namespace GameModes
         {
             if (All.Any(m => m.Id == id)) return;
             All.Add(new GameMode { Id = id, LabelLocKey = labelLocKey, Alone = alone, WithOthers = withOthers });
+        }
+
+        /**
+         * The pictures a game mode has behind the screens: the New Game screens while it's the mode picked, and the
+         * loading screen of a game in it, new or saved. Each is a function returning the path of an image file
+         * (a JPG or PNG in the mod's folder) when the screen shows, or null for none, so a mod can change its
+         * picture with the date or its settings. Without one, the game's own picture stays.
+         */
+        public static void SetBackground(string id, Func<string> menu = null, Func<string> loading = null)
+        {
+            if (Get(id) is not { } mode) return;
+            mode.MenuPicture = menu;
+            mode.LoadingPicture = loading;
         }
 
         public static GameMode Get(string id) => All.FirstOrDefault(m => m.Id == id);
