@@ -22,7 +22,7 @@ sys.path.insert(0, str(TE / "Models" / "Icons"))
 import make_icons as mi  # noqa: E402
 
 W, H = 1920, 1080
-ART = 760                       # the drawing's square
+ART = 1000                      # the drawing's square
 mi.SIZE = ART
 mi.SCALE = ART * mi.SS / 100
 
@@ -76,23 +76,47 @@ def background():
     return img
 
 
+def figure(g, x, y, w=2.8):
+    """A settler standing with its feet at y, 20 high."""
+    g.circle(x, y - 17, 3.6, w=w)
+    g.line((x, y - 12), (x, y - 5), w=w + 0.4)
+    g.line((x, y - 5), (x - 3.5, y), w=w)
+    g.line((x, y - 5), (x + 3.5, y), w=w)
+
+
 def drawing():
-    """The three buttons, 100 grid. Returns the strokes and the buttons' fill."""
+    """Three cards side by side, the game mode list: Co-op, PvE and PvP, PvE picked. 100 grid.
+    Returns the strokes and the cards' fill."""
     g = mi.Glyph()
-    rows = [(14, 34), (40, 60), (66, 86)]
+    top, bottom = 24, 76
     fill = []
-    for n, (top, bottom) in enumerate(rows):
+    for n, (left, right) in enumerate(((6, 31), (37.5, 62.5), (69, 94))):
         picked = n == 1
-        left, right = 14, 86
-        g.line((left, top), (right, top), (right, bottom), (left, bottom), (left, top), taper=False, w=3.6 if picked else 2.6)
+        cx = (left + right) / 2
+        g.line((left, top), (right, top), (right, bottom), (left, bottom), (left, top), taper=False, w=3.2 if picked else 2.4)
         fill.append([(left, top), (right, top), (right, bottom), (left, bottom)])
-        mid = (top + bottom) / 2
-        # The button's name, as a stroke
-        g.line((28, mid), (58 if picked else 52 - 6 * (n == 2), mid), w=3.4 if picked else 2.6)
+        # Its picture: Co-op, two settlers side by side holding hands; PvE, a settler and a bandit camp; PvP, crossed swords
+        if n == 0:
+            figure(g, cx - 6.5, 55)
+            figure(g, cx + 6.5, 55)
+            g.line((cx - 6.5, 47.5), (cx + 6.5, 47.5), w=2.6)
+        elif n == 1:
+            figure(g, cx - 7, 55)
+            g.line((cx - 7, 47.5), (cx - 3, 47.5), w=2.6)
+            g.line((cx - 1, 55), (cx + 4.5, 40), (cx + 10, 55), (cx - 1, 55), taper=False, w=2.6)
+            g.line((cx + 4.5, 40), (cx + 4.5, 36), (cx + 8.5, 37.5), w=2.2)
+        else:
+            for d in (-1, 1):
+                # A blade from the top corner down to its hilt, with the guard across and the grip past it
+                g.line((cx + 9 * d, 33), (cx - 6 * d, 52), w=2.8)
+                g.line((cx - 2.8 * d - 3 * d, 46.8), (cx - 2.8 * d + 3 * d, 51.2), w=2.4)
+                g.line((cx - 6 * d, 52), (cx - 8 * d, 55), w=3)
+        # The card's name, as a stroke
+        g.line((cx - 7, 63), (cx + 7, 63), w=3.2 if picked else 2.4)
         if picked:
-            # A second outline inside, and the check on the right
-            g.line((19, top + 5), (81, top + 5), (81, bottom - 5), (19, bottom - 5), (19, top + 5), taper=False, w=1.6)
-            g.line((66, mid + 1), (71, mid + 6), (79, mid - 5), w=3.4)
+            # A second outline inside, and the check on the corner
+            g.line((left + 3, top + 3), (right - 3, top + 3), (right - 3, bottom - 3), (left + 3, bottom - 3), (left + 3, top + 3), taper=False, w=1.5)
+            g.line((cx - 4, 70), (cx - 1, 73), (cx + 5, 67.5), w=2.8)
     return g, fill
 
 
@@ -108,7 +132,7 @@ def main():
         ImageDraw.Draw(paper).polygon([(x * mi.SCALE, y * mi.SCALE) for x, y in button], fill=255)
     paper = paper.resize((ART, ART), Image.LANCZOS)
 
-    ox, oy = (W - ART) // 2, (H - ART) // 2 + 20
+    ox, oy = (W - ART) // 2, (H - ART) // 2 + 10
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
 
     shadow = Image.new("L", (W, H), 0)
@@ -124,7 +148,7 @@ def main():
 
     # A glow behind the picked button
     glow = Image.new("L", (W, H), 0)
-    ImageDraw.Draw(glow).ellipse([W / 2 - 330, oy + 250, W / 2 + 330, oy + 510], fill=120)
+    ImageDraw.Draw(glow).ellipse([W / 2 - 230, oy + 250, W / 2 + 230, oy + 750], fill=120)
     glow = glow.filter(ImageFilter.GaussianBlur(70))
     warm = Image.new("RGBA", (W, H), (230, 200, 130, 0))
     warm.putalpha(glow.point(lambda v: int(v * 0.5)))
