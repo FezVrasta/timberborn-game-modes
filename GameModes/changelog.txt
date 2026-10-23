@@ -1,3 +1,7 @@
+v1.1.0-1.2.0
+* Fixed the New Game screens reacting twice to a mode pick after returning to the main menu a few times.
+* A game's mode and settings are available to other mods from the first moment it loads.
+
 v1.1.0-1.1.0
 * Mods can add their own game settings to the Customize list on the New Game screens.
 * The Load Game box shows a save's game mode and settings.
