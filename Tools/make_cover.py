@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Draws the mod's cover: three stacked buttons like the game mode list, the
-middle one picked, in the brush strokes of Timber Empires' icons
+"""Draws the mod's cover: its name over three cards like the game mode list, the
+middle one picked, all in the brush strokes of Timber Empires' icons
 (Models/Icons/make_icons.py, found next to this repo), on a blueprint-paper
 background like the Mod Uploader's.
 
     python3 Tools/make_cover.py [Timber Empires checkout]
 
-Needs Pillow, and macOS for the Avenir Next font. Writes Media/cover.png (1920x1080, for the Workshop and mod.io pages) and
+Writes Media/cover.png (1920x1080, for the Workshop and mod.io pages) and
 GameModes/thumbnail.png (800x450, the one the game's mod list shows).
 """
 import math
@@ -14,7 +14,7 @@ import random
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[1]
 TE = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT.parent / "TimberEmpires"
@@ -26,9 +26,7 @@ ART = 1000                      # the drawing's square
 mi.SIZE = ART
 mi.SCALE = ART * mi.SS / 100
 
-FONT = ("/System/Library/Fonts/Avenir Next.ttc", 8)  # Avenir Next Heavy, as Timber Empires' logo
 TITLE = "GAME MODES"
-CHALK = (244, 240, 226)
 
 PAPER = (28, 62, 104)
 PAPER_LIGHT = (52, 102, 156)
@@ -95,6 +93,35 @@ class Scaled:
     def circle(self, x, y, r, w):
         px, py = self._p((x, y))
         self.g.circle(px, py, r * self.k, w=w)
+
+
+# The capitals as strokes on a unit box, each a list of strokes through its points
+LETTERS = {
+    "G": [[(1, .15), (.7, 0), (.3, 0), (0, .2), (0, .8), (.3, 1), (.7, 1), (1, .85), (1, .55), (.55, .55)]],
+    "A": [[(0, 1), (.5, 0), (1, 1)], [(.2, .66), (.8, .66)]],
+    "M": [[(0, 1), (0, 0), (.5, .62), (1, 0), (1, 1)]],
+    "E": [[(1, 0), (0, 0), (0, 1), (1, 1)], [(0, .5), (.75, .5)]],
+    "O": [[(.3, 0), (.7, 0), (1, .2), (1, .8), (.7, 1), (.3, 1), (0, .8), (0, .2), (.3, 0)]],
+    "D": [[(0, 0), (0, 1), (.6, 1), (1, .8), (1, .2), (.6, 0), (0, 0)]],
+    "S": [[(1, .15), (.7, 0), (.3, 0), (0, .18), (.25, .45), (.75, .55), (1, .82), (.7, 1), (.3, 1), (0, .85)]],
+}
+
+
+def title():
+    """The mod's name in the same brush strokes as the pictures, across the top of its own 100 grid."""
+    g = mi.Glyph()
+    height, width, track, space = 13, 7.4, 2.4, 6
+    total = sum(space if ch == " " else width for ch in TITLE) + track * (len(TITLE) - 1)
+    x = (100 - total) / 2
+    for ch in TITLE:
+        if ch == " ":
+            x += space + track
+            continue
+        for stroke in LETTERS[ch]:
+            closed = stroke[0] == stroke[-1]
+            g.line(*[(x + px * width, 8 + py * height) for px, py in stroke], w=2.5, taper=False)
+        x += width + track
+    return g
 
 
 def figure(g, x, y, w=2.8):
@@ -179,27 +206,20 @@ def main():
     gold = Image.new("RGBA", (ART, ART), mi.GOLD + (0,))
     gold.putalpha(strokes)
     layer.alpha_composite(gold, (ox, oy))
-    img.alpha_composite(layer)
 
-    # The title across the top, in chalk, on a soft dark halo
-    cap = 118
-    font = ImageFont.truetype(FONT[0], int(cap * 1.4), index=FONT[1])
-    _, cap_top, _, _ = font.getbbox("H", anchor="ls")
-    font = ImageFont.truetype(FONT[0], int(cap * 1.4 * cap / -cap_top), index=FONT[1])
-    track = cap * 0.09
-    widths = [font.getlength(ch) for ch in TITLE]
-    x = (W - (sum(widths) + track * (len(TITLE) - 1))) / 2
-    mask = Image.new("L", (W, H), 0)
-    md = ImageDraw.Draw(mask)
-    for ch, w in zip(TITLE, widths):
-        md.text((x, 232), ch, font=font, fill=255, anchor="ls")
-        x += w + track
-    halo = Image.new("RGBA", (W, H), (8, 18, 38, 0))
-    halo.putalpha(mask.filter(ImageFilter.GaussianBlur(14)).point(lambda v: min(255, int(v * 1.6))))
-    img.alpha_composite(halo)
-    chalk = Image.new("RGBA", (W, H), CHALK + (0,))
-    chalk.putalpha(mask)
-    img.alpha_composite(chalk)
+    # The title, in strokes too, above the cards
+    toy = 30
+    lettering = title().mask.resize((ART, ART), Image.LANCZOS)
+    tshadow = Image.new("L", (W, H), 0)
+    tshadow.paste(lettering, (ox + 6, toy + 12))
+    tshadow = tshadow.filter(ImageFilter.GaussianBlur(14)).point(lambda v: int(v * 0.6))
+    tblack = Image.new("RGBA", (W, H), (6, 14, 30, 0))
+    tblack.putalpha(tshadow)
+    img.alpha_composite(tblack)
+    tgold = Image.new("RGBA", (ART, ART), mi.GOLD + (0,))
+    tgold.putalpha(lettering)
+    layer.alpha_composite(tgold, (ox, toy))
+    img.alpha_composite(layer)
 
     # Grain, then the vignette
     rnd = random.Random(11)
