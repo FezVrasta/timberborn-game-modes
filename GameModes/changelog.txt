@@ -1,3 +1,8 @@
+v1.1.0-1.3.0
+* A game mode can have its own picture behind the New Game screens and the loading screen of its games.
+* A mod can say which game mode comes up first.
+* Mods can read a game's mode and settings from the first moment it loads.
+
 v1.1.0-1.2.0
 * Fixed the New Game screens reacting twice to a mode pick after returning to the main menu a few times.
 * A game's mode and settings are available to other mods from the first moment it loads.

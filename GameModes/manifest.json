@@ -1,6 +1,6 @@
 {
   "Name": "Game Modes",
-  "Version": "1.1.0-1.2.0",
+  "Version": "1.1.0-1.3.0",
   "Id": "gamemodes",
   "MinimumGameVersion": "1.1.0.0",
   "Description": "Game modes, game settings and a saved record of how a game was made, for mods that change how Timberborn plays.\n\nOn its own it changes nothing: with no mod adding a mode, New Game is the game's own. Mods like [url=https://github.com/FezVrasta/BeaverBuddies-CoOp-PvP-Edition]BeaverBuddies Co-Op/PvP Edition[/url] and [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3814012422]Timber Empires[/url] add theirs.\n\n[h2]What players get[/h2]\n[list]\n[*]A Game Mode column on the New Game screens, with a line about what each mode plays like.\n[*]Each mod's rules at the end of the Customize list under its own heading: checkboxes, choices, sliders and lists, with Easy, Normal and Hard filling in the values a mod sets for them.\n[*]A save's game mode and settings in the Load Game box.\n[/list]\n\n[h2]For mod authors[/h2]\n[list]\n[*]Modes: add one with GameModes.Modes.Add(id, labelLocKey), describe it with Describe, and read the pick as the game loads with Modes.Game.\n[*]Settings: toggles, choices, sliders and lists defined under your heading with GameSettings.Group, offered in the modes you pick and read back as typed values.\n[*]Records: a game's mode and settings are saved with it and in its metadata, and can be read from a save without loading it.\n[/list]\nSource and docs: [url=https://github.com/FezVrasta/timberborn-game-modes]github.com/FezVrasta/timberborn-game-modes[/url].",
