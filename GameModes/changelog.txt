@@ -1,0 +1,2 @@
+1.1.0-1.0.0
+- First release: the game mode column on the New Game screens, split out of BeaverBuddies.
