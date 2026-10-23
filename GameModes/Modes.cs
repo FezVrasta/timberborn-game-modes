@@ -64,7 +64,33 @@ namespace GameModes
          */
         public static event Action<IReadOnlyDictionary<string, string>, bool> GameLoading;
 
-        internal static void RaiseGameLoading(IReadOnlyDictionary<string, string> record, bool newGame) => GameLoading?.Invoke(record, newGame);
+        internal static void RaiseGameLoading(IReadOnlyDictionary<string, string> record, bool newGame)
+        {
+            CurrentRecord = record != null ? new Dictionary<string, string>(record) : new Dictionary<string, string>();
+            GameLoading?.Invoke(CurrentRecord, newGame);
+        }
+
+        /**
+         * The record of the game loading, and then loaded (see GameRecord): its mode and settings, there
+         * from the first moment of loading, a new game's picks or a save's own. A save from before records
+         * has none, until a mod completes it (Complete).
+         */
+        public static Dictionary<string, string> CurrentRecord { get; private set; } = new();
+
+        /** The loaded game's mode, or null for a game started without one. */
+        public static string Current => ModeOf(CurrentRecord);
+
+        /** Whether the loaded game is played alone. */
+        public static bool CurrentAlone => IsAlone(CurrentRecord);
+
+        /**
+         * Puts a value in the loaded game's record where it has none: a mod that kept a setting's value
+         * with the game itself before records existed hands it over as that older save loads.
+         */
+        public static void Complete(string id, string text)
+        {
+            if (!CurrentRecord.ContainsKey(id)) CurrentRecord[id] = text;
+        }
 
         public static void Add(string id, string labelLocKey, bool alone = true, bool withOthers = true)
         {

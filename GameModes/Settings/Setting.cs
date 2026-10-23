@@ -110,8 +110,11 @@ namespace GameModes
         public T Of(IReadOnlyDictionary<string, string> record) =>
             record != null && record.TryGetValue(Id, out string text) ? Parsed(text) : Default;
 
-        /** The value of the game loaded, new or saved. */
-        public T Current => Of(GameRecord.Current);
+        /** The value of the game loading, and then loaded, new or saved: there from the first moment of loading. */
+        public T Current => Of(Modes.CurrentRecord);
+
+        /** Hands over the value an older save kept itself, where the loaded game's record has none (see Modes.Complete). */
+        public void Complete(T value) => Modes.Complete(Id, Format(value));
 
         protected TSelf Self => (TSelf)this;
 

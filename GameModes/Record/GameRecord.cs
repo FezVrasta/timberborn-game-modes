@@ -59,29 +59,18 @@ namespace GameModes
 
         private readonly ISingletonLoader _singletonLoader;
 
-        /** The loaded game's, new or saved. */
-        public static Dictionary<string, string> Current { get; private set; }
-
-        /** A mod adds what else it wants kept with a new game: told as the new game's record is made. */
-        public static event Action<Dictionary<string, string>> Building;
-
-        /** Lines about a record for the Load Game box and lobbies ("Name: value"), beyond the mode's and the settings'. */
-        public static readonly List<Func<ILoc, IReadOnlyDictionary<string, string>, IEnumerable<string>>> Describers = new();
+        /** The loaded game's, new or saved (the same as Modes.CurrentRecord). */
+        public static Dictionary<string, string> Current => Modes.CurrentRecord;
 
         public GameRecord(ISingletonLoader singletonLoader) => _singletonLoader = singletonLoader;
 
         public void Load()
         {
+            // A new game's record was made as it started loading, from its picks; a saved game's is
+            // what it was saved with (the same as its metadata's, but a mod may have completed it since)
             if (_singletonLoader.TryGetSingleton(Key, out IObjectLoader loader) && loader.Has(ValuesKey))
             {
-                Current = Parse(loader.Get(ValuesKey));
-            }
-            else
-            {
-                // A new game has its picks; a save from before this, nothing
-                Current = new Dictionary<string, string>(Modes.Record());
-                foreach (var pair in GameSettings.ForGame) Current[pair.Key] = pair.Value;
-                Building?.Invoke(Current);
+                foreach (var pair in Parse(loader.Get(ValuesKey))) Current[pair.Key] = pair.Value;
             }
         }
 
@@ -133,15 +122,10 @@ namespace GameModes
             }
         }
 
-        /** A record in words, one "Name: value" per line: the game's mode, then what mods describe. */
+        /** A record in words, one "Name: value" per line: the game's mode. */
         public static IEnumerable<string> Describe(ILoc loc, IReadOnlyDictionary<string, string> record)
         {
-            if (record == null) yield break;
             if (Modes.ModeOf(record) is { } mode) yield return $"{loc.T("GameModes.GameMode")}: {Modes.Label(loc, mode)}";
-            foreach (var describer in Describers)
-            {
-                foreach (string line in describer(loc, record)) yield return line;
-            }
         }
     }
 

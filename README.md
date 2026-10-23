@@ -57,7 +57,7 @@ Text keys follow from the one given: the setting's name, `+ ".Tooltip"` for what
 | `Pressure.Current` | the loaded game's |
 | `Pressure.Picked` | what the player has picked on the page now |
 
-A game's record (`GameRecord`) is its mode and settings, saved with it and in its metadata, and shown in the Load Game box. `GameRecord.ReadFromSave(repository, save)` reads it without loading the save, `Modes.GameLoading` tells you how each game was made as it starts loading, and `GameRecord.Building` and `GameRecord.Describers` add to what's kept and shown. `GameSettings.AddRow` puts a row of your own, made by hand, in the list under a heading.
+A game's record (`GameRecord`) is its mode and settings, saved with it and in its metadata, and shown in the Load Game box. It's there from the first moment a game loads (`Modes.CurrentRecord`, `Modes.Current`, `Setting.Current`), whether it's new or saved. `GameRecord.ReadFromSave(repository, save)` reads it without loading the save, and `Modes.GameLoading` tells you how each game was made as it starts loading. A mod that kept a setting's value with the game itself before records existed hands it over as that older save loads, with `setting.Complete(value)`. `GameSettings.AddRow` puts a row of your own, made by hand, in the list under a heading.
 
 ## Building
 
