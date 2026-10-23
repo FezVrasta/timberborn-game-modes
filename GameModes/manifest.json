@@ -3,8 +3,10 @@
   "Version": "1.1.0-1.0.0",
   "Id": "gamemodes",
   "MinimumGameVersion": "1.1.0.0",
-  "Description": "A game mode picker on the New Game screens, for mods that add ways to play.\n\nOn its own it changes nothing: with no mod adding a mode, New Game is the game's own. Mods like [url=https://github.com/FezVrasta/BeaverBuddies-CoOp-PvP-Edition]BeaverBuddies Co-Op/PvP Edition[/url] and Timber Empires add theirs, and each mode comes with its own line about what it plays like.\n\n[h2]For mod authors[/h2]\nAdd a mode with GameModes.Modes.Add(id, labelLocKey), describe it with Describe, and read the pick as the game loads with Modes.Game. Source and details: [url=https://github.com/FezVrasta/timberborn-game-modes]github.com/FezVrasta/timberborn-game-modes[/url].",
+  "Description": "A game mode picker on the New Game screens, for mods that add ways to play.\n\nOn its own it changes nothing: with no mod adding a mode, New Game is the game's own. Mods like [url=https://github.com/FezVrasta/BeaverBuddies-CoOp-PvP-Edition]BeaverBuddies Co-Op/PvP Edition[/url] and Timber Empires add theirs, and each mode comes with its own line about what it plays like.\n\n[h2]For mod authors[/h2]\nAdd a mode with GameModes.Modes.Add(id, labelLocKey), describe it with Describe, and read the pick as the game loads with Modes.Game.",
   "RequiredMods": [
-    { "Id": "Harmony" }
+    {
+      "Id": "Harmony"
+    }
   ]
 }
