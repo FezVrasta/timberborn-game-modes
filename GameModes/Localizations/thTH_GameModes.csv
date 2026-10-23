@@ -2,3 +2,8 @@ ID,Text,Comment
 GameModes.GameMode,"โหมดเกม","Game mode"
 GameModes.Classic,"คลาสสิก","Classic"
 GameModes.Classic.Description,"Timberborn แบบดั้งเดิม","Timberborn as it comes."
+GameModes.Settings.None,"ไม่มี",""
+GameModes.Settings.On,"เปิด",""
+GameModes.Settings.Off,"ปิด",""
+GameModes.Settings.Defaults,"การตั้งค่าเกม: ค่าเริ่มต้น",""
+GameModes.Settings.Changed,"การตั้งค่าเกม: {0}",""

@@ -2,3 +2,8 @@ ID,Text,Comment
 GameModes.GameMode,"遊戲模式","Game mode"
 GameModes.Classic,"經典","Classic"
 GameModes.Classic.Description,"原汁原味的 Timberborn。","Timberborn as it comes."
+GameModes.Settings.None,"無",""
+GameModes.Settings.On,"開啟",""
+GameModes.Settings.Off,"關閉",""
+GameModes.Settings.Defaults,"遊戲設定：預設",""
+GameModes.Settings.Changed,"遊戲設定：{0}",""

@@ -2,3 +2,8 @@ ID,Text,Comment
 GameModes.GameMode,"Modo de juego","Game mode"
 GameModes.Classic,"Clásico","Classic"
 GameModes.Classic.Description,"Timberborn tal cual.","Timberborn as it comes."
+GameModes.Settings.None,"Ninguno",""
+GameModes.Settings.On,"Sí",""
+GameModes.Settings.Off,"No",""
+GameModes.Settings.Defaults,"Ajustes de la partida: los predeterminados",""
+GameModes.Settings.Changed,"Ajustes de la partida: {0}",""

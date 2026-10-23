@@ -2,3 +2,8 @@ ID,Text,Comment
 GameModes.GameMode,"ゲームモード","Game mode"
 GameModes.Classic,"クラシック","Classic"
 GameModes.Classic.Description,"いつものTimberborn。","Timberborn as it comes."
+GameModes.Settings.None,"なし",""
+GameModes.Settings.On,"オン",""
+GameModes.Settings.Off,"オフ",""
+GameModes.Settings.Defaults,"ゲーム設定: デフォルト",""
+GameModes.Settings.Changed,"ゲーム設定: {0}",""

@@ -31,6 +31,34 @@ A mod that starts games with others (multiplayer) sets `Modes.PageAlone` to say 
 
 `Classic` (`gamemodes.classic`) is the game as it comes, offered for games alone.
 
+## Game settings
+
+Rules a mod adds to the New Game screens' Customize list (a toggle, a choice, a slider, a list), picked when the game is created and saved with it. Define them once, typed, under your own heading:
+
+```csharp
+static readonly SettingGroup Rules = GameSettings.Group("MyMod.Settings");   // the heading's loc key
+
+public static readonly ToggleSetting Pressure = Rules.Toggle("mymod.pressure", "MyMod.Settings.Pressure");
+public static readonly SliderSetting Raids = Rules.Slider("mymod.raids", "MyMod.Settings.Raids", 0, 20, 1, 7)
+    .When(kind => kind.Is("mymod.race"));
+public static readonly ChoiceSetting Victory = Rules.Choice("mymod.victory", "MyMod.Settings.Victory", "camps", "camps", "ruins");
+public static readonly ListSetting Bots = Rules.List("mymod.bots", "MyMod.Settings.Bots", "MyMod.Settings.Bot", 3, "normal", "easy", "normal", "hard");
+```
+
+Text keys follow from the one given: the setting's name, `+ ".Tooltip"` for what hovering it says, `+ ".Value"` for how a slider's value reads (`"{0} %"`, with `.<value>` for a value that has a word of its own and `.Min` for the lowest), `+ "." + value` for a choice's values. Change any with `Tip`, `ValueText`, `ValueKeys`, `Small` (a line of small print under the name), and give each difficulty its own value with `Presets(easy, normal, hard)`.
+
+`When` says which games a setting is for, by the mode, alone or with others (`GameKind`); a group's `When` is the default for what's defined under it. Read a setting as the game loads:
+
+| | |
+|---|---|
+| `Pressure.Value` | the pick for the new game loading (its default for a saved game, which keeps its own copy) |
+| `Pressure.TryGetNewGameValue(out v)` | the same, and whether there is a pick |
+| `Pressure.Of(record)` | the value in a game's record, for a save read without loading it |
+| `Pressure.Current` | the loaded game's |
+| `Pressure.Picked` | what the player has picked on the page now |
+
+A game's record (`GameRecord`) is its mode and settings, saved with it and in its metadata, and shown in the Load Game box. `GameRecord.ReadFromSave(repository, save)` reads it without loading the save, `Modes.GameLoading` tells you how each game was made as it starts loading, and `GameRecord.Building` and `GameRecord.Describers` add to what's kept and shown. `GameSettings.AddRow` puts a row of your own, made by hand, in the list under a heading.
+
 ## Building
 
 Copy `GameModes/env.props.*-template` to `GameModes/env.props` and point it at Timberborn and Harmony, then `dotnet build GameModes/GameModes.csproj`. It installs into `Documents/Timberborn/Mods/GameModes`.

@@ -2,3 +2,8 @@ ID,Text,Comment
 GameModes.GameMode,"Режим гри","Game mode"
 GameModes.Classic,"Класика","Classic"
 GameModes.Classic.Description,"Timberborn як він є.","Timberborn as it comes."
+GameModes.Settings.None,"Немає",""
+GameModes.Settings.On,"Увімк.",""
+GameModes.Settings.Off,"Вимк.",""
+GameModes.Settings.Defaults,"Налаштування гри: стандартні",""
+GameModes.Settings.Changed,"Налаштування гри: {0}",""

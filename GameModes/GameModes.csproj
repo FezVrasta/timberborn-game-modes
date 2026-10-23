@@ -36,6 +36,7 @@
     <Reference Include="$(HarmonyPath)0Harmony.dll" Private="false" />
     <Reference Include="$(TimberbornManagedPath)Bindito.Core.dll" Publicize="true" Private="false" />
     <Reference Include="$(TimberbornManagedPath)Bindito.Unity.dll" Private="false" />
+    <Reference Include="$(TimberbornManagedPath)Newtonsoft.Json.dll" Private="false" />
     <Reference Include="$(TimberbornManagedPath)UnityEngine.*.dll" Publicize="true" Private="false" />
     <Reference Include="$(TimberbornManagedPath)Timberborn.*.dll" Publicize="true" Private="false" />
   </ItemGroup>

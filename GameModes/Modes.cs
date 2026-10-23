@@ -57,6 +57,15 @@ namespace GameModes
         // Told when a mode is picked
         public static event Action Picked;
 
+        /**
+         * Told as each game starts loading, with its record (the mode's keys and the settings'; see
+         * GameRecord) for a new game, or the record in its save for a saved one (null if it has none).
+         * Mods that act on how a game was made, before its services are put together, listen here.
+         */
+        public static event Action<IReadOnlyDictionary<string, string>, bool> GameLoading;
+
+        internal static void RaiseGameLoading(IReadOnlyDictionary<string, string> record, bool newGame) => GameLoading?.Invoke(record, newGame);
+
         public static void Add(string id, string labelLocKey, bool alone = true, bool withOthers = true)
         {
             if (All.Any(m => m.Id == id)) return;

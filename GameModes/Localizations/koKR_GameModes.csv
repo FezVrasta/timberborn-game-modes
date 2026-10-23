@@ -2,3 +2,8 @@ ID,Text,Comment
 GameModes.GameMode,"게임 모드","Game mode"
 GameModes.Classic,"클래식","Classic"
 GameModes.Classic.Description,"원래 그대로의 Timberborn.","Timberborn as it comes."
+GameModes.Settings.None,"없음",""
+GameModes.Settings.On,"켜짐",""
+GameModes.Settings.Off,"꺼짐",""
+GameModes.Settings.Defaults,"게임 설정: 기본값",""
+GameModes.Settings.Changed,"게임 설정: {0}",""
