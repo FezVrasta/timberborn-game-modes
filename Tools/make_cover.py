@@ -6,7 +6,7 @@ background like the Mod Uploader's.
 
     python3 Tools/make_cover.py [Timber Empires checkout]
 
-Writes Media/cover.png (1920x1080, for the Workshop and mod.io pages) and
+Needs Pillow, and macOS for the Avenir Next font. Writes Media/cover.png (1920x1080, for the Workshop and mod.io pages) and
 GameModes/thumbnail.png (800x450, the one the game's mod list shows).
 """
 import math
@@ -14,7 +14,7 @@ import random
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageDraw, ImageFilter
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
 TE = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT.parent / "TimberEmpires"
@@ -25,6 +25,10 @@ W, H = 1920, 1080
 ART = 1000                      # the drawing's square
 mi.SIZE = ART
 mi.SCALE = ART * mi.SS / 100
+
+FONT = ("/System/Library/Fonts/Avenir Next.ttc", 8)  # Avenir Next Heavy, as Timber Empires' logo
+TITLE = "GAME MODES"
+CHALK = (244, 240, 226)
 
 PAPER = (28, 62, 104)
 PAPER_LIGHT = (52, 102, 156)
@@ -150,7 +154,7 @@ def main():
         ImageDraw.Draw(paper).polygon([(x * mi.SCALE, y * mi.SCALE) for x, y in button], fill=255)
     paper = paper.resize((ART, ART), Image.LANCZOS)
 
-    ox, oy = (W - ART) // 2, (H - ART) // 2 + 10
+    ox, oy = (W - ART) // 2, (H - ART) // 2 + 55
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
 
     shadow = Image.new("L", (W, H), 0)
@@ -176,6 +180,26 @@ def main():
     gold.putalpha(strokes)
     layer.alpha_composite(gold, (ox, oy))
     img.alpha_composite(layer)
+
+    # The title across the top, in chalk, on a soft dark halo
+    cap = 118
+    font = ImageFont.truetype(FONT[0], int(cap * 1.4), index=FONT[1])
+    _, cap_top, _, _ = font.getbbox("H", anchor="ls")
+    font = ImageFont.truetype(FONT[0], int(cap * 1.4 * cap / -cap_top), index=FONT[1])
+    track = cap * 0.09
+    widths = [font.getlength(ch) for ch in TITLE]
+    x = (W - (sum(widths) + track * (len(TITLE) - 1))) / 2
+    mask = Image.new("L", (W, H), 0)
+    md = ImageDraw.Draw(mask)
+    for ch, w in zip(TITLE, widths):
+        md.text((x, 232), ch, font=font, fill=255, anchor="ls")
+        x += w + track
+    halo = Image.new("RGBA", (W, H), (8, 18, 38, 0))
+    halo.putalpha(mask.filter(ImageFilter.GaussianBlur(14)).point(lambda v: min(255, int(v * 1.6))))
+    img.alpha_composite(halo)
+    chalk = Image.new("RGBA", (W, H), CHALK + (0,))
+    chalk.putalpha(mask)
+    img.alpha_composite(chalk)
 
     # Grain, then the vignette
     rnd = random.Random(11)
