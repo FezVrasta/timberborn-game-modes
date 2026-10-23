@@ -232,7 +232,8 @@ namespace GameModes
             yield return AccessTools.Method(typeof(GameSceneLoader), nameof(GameSceneLoader.StartNewGameInstantly));
         }
 
-        [HarmonyPriority(Priority.Low)]
+        // After the mode's own prefix (normal), before mods that read the new game's settings in theirs (low)
+        [HarmonyPriority(Priority.LowerThanNormal)]
         static void Prefix()
         {
             GameSettings.Starting(newGame: true);

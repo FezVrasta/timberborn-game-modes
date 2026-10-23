@@ -66,8 +66,8 @@ namespace GameModes
 
         internal static void RaiseGameLoading(IReadOnlyDictionary<string, string> record, bool newGame)
         {
-            CurrentRecord = record != null ? new Dictionary<string, string>(record) : new Dictionary<string, string>();
-            GameLoading?.Invoke(CurrentRecord, newGame);
+            _currentRecord = record != null ? new Dictionary<string, string>(record) : new Dictionary<string, string>();
+            GameLoading?.Invoke(_currentRecord, newGame);
         }
 
         /**
@@ -75,7 +75,10 @@ namespace GameModes
          * from the first moment of loading, a new game's picks or a save's own. A save from before records
          * has none, until a mod completes it (Complete).
          */
-        public static Dictionary<string, string> CurrentRecord { get; private set; } = new();
+        // Never changed once it's in place: a completed record is a new one that replaces it, so threads
+        // that read it (the server, say) always see a whole one
+        private static volatile Dictionary<string, string> _currentRecord = new();
+        public static IReadOnlyDictionary<string, string> CurrentRecord => _currentRecord;
 
         /** The loaded game's mode, or null for a game started without one. */
         public static string Current => ModeOf(CurrentRecord);
@@ -89,7 +92,15 @@ namespace GameModes
          */
         public static void Complete(string id, string text)
         {
-            if (!CurrentRecord.ContainsKey(id)) CurrentRecord[id] = text;
+            if (!_currentRecord.ContainsKey(id)) Merge(new[] { new KeyValuePair<string, string>(id, text) });
+        }
+
+        // The record with these added (they win over what's there)
+        internal static void Merge(IEnumerable<KeyValuePair<string, string>> values)
+        {
+            var merged = new Dictionary<string, string>(_currentRecord);
+            foreach (var pair in values) merged[pair.Key] = pair.Value;
+            _currentRecord = merged;
         }
 
         public static void Add(string id, string labelLocKey, bool alone = true, bool withOthers = true)

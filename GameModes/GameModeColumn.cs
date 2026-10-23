@@ -50,9 +50,10 @@ namespace GameModes
             _visualElementLoader = visualElementLoader;
             _loc = loc;
             Instance = this;
-            Modes.Picked -= OnPicked;
-            Modes.Picked += OnPicked;
         }
+
+        // Subscribed once, to the column the menu has now: the menu's classes are made again each time it loads
+        static GameModeColumn() => Modes.Picked += () => Instance?.OnPicked();
 
         private static bool HasChoice(bool alone) => Modes.For(alone).Count > 1;
 

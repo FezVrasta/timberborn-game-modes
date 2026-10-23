@@ -53,10 +53,10 @@ namespace GameModes
             _ui = new SettingsUi(loc, tooltipRegistrar, visualElementLoader);
             _dialogBoxShower = dialogBoxShower;
             Instance = this;
-            // The settings shown depend on the mode
-            Modes.Picked -= Refresh;
-            Modes.Picked += Refresh;
         }
+
+        // The settings shown depend on the mode: subscribed once, to the dialog the menu has now
+        static CustomizeDialog() => Modes.Picked += () => Instance?.Refresh();
 
         private static List<Setting> Shown(GameKind kind) => GameSettings.All.Where(s => s.AppliesTo(kind)).ToList();
 

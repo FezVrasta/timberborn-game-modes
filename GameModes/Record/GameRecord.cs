@@ -60,7 +60,7 @@ namespace GameModes
         private readonly ISingletonLoader _singletonLoader;
 
         /** The loaded game's, new or saved (the same as Modes.CurrentRecord). */
-        public static Dictionary<string, string> Current => Modes.CurrentRecord;
+        public static IReadOnlyDictionary<string, string> Current => Modes.CurrentRecord;
 
         public GameRecord(ISingletonLoader singletonLoader) => _singletonLoader = singletonLoader;
 
@@ -70,7 +70,7 @@ namespace GameModes
             // what it was saved with (the same as its metadata's, but a mod may have completed it since)
             if (_singletonLoader.TryGetSingleton(Key, out IObjectLoader loader) && loader.Has(ValuesKey))
             {
-                foreach (var pair in Parse(loader.Get(ValuesKey))) Current[pair.Key] = pair.Value;
+                Modes.Merge(Parse(loader.Get(ValuesKey)));
             }
         }
 

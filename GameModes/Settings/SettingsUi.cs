@@ -20,9 +20,6 @@ namespace GameModes
         internal const string ToggleClass = "new-game-mode-panel__setting-toggle";
         internal const string LabelClass = "new-game-mode-panel__setting-label";
 
-        // Hovering a long text wraps it instead of running across the screen
-        private const int TooltipWidth = 420;
-
         private readonly ILoc _loc;
         private readonly ITooltipRegistrar _tooltipRegistrar;
         private readonly VisualElementLoader _visualElementLoader;
@@ -42,13 +39,7 @@ namespace GameModes
         public void Tip(VisualElement target, string locKey)
         {
             if (string.IsNullOrEmpty(locKey) || _loc.T(locKey) == locKey) return;
-            _tooltipRegistrar.Register(target, () =>
-            {
-                var label = new Label(_loc.T(locKey));
-                label.style.whiteSpace = WhiteSpace.Normal;
-                label.style.width = TooltipWidth;
-                return label;
-            });
+            WrappedTooltip.Register(_tooltipRegistrar, target, () => _loc.T(locKey));
         }
 
         /** A label in the list's style, with its number for one that takes one ("Opponent {0}"). */
