@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Bindito.Core;
+using Timberborn.Localization;
 using Timberborn.MainMenuPanels;
 using Timberborn.SceneLoading;
 using Timberborn.SingletonSystem;
@@ -149,8 +150,13 @@ namespace GameModes
     public class LoadingBackground : ILoadableSingleton, IUnloadableSingleton
     {
         private readonly LoadingScreen _loadingScreen;
+        private readonly ILoc _loc;
 
-        public LoadingBackground(LoadingScreen loadingScreen) => _loadingScreen = loadingScreen;
+        public LoadingBackground(LoadingScreen loadingScreen, ILoc loc)
+        {
+            _loadingScreen = loadingScreen;
+            _loc = loc;
+        }
 
         public void Load() => _loadingScreen.LoadingScreenEnabled += OnLoadingScreenEnabled;
 
@@ -160,11 +166,24 @@ namespace GameModes
         {
             string mode = Backgrounds.NextLoadMode;
             Backgrounds.NextLoadMode = null;
+            ShowTip(mode);
             string path = Backgrounds.LoadingPicture(mode);
             // Other games keep what the game just set: clearing it would drop the game's own picture
             if (path == null) return;
             Debug.Log($"[GameModes] Loading screen: the picture of {mode}");
             Backgrounds.Show(Backgrounds.BackgroundIn(_loadingScreen._root), path);
+        }
+
+        // Half the time, a hint of the mode takes the place of the game's
+        private void ShowTip(string mode)
+        {
+            var tips = mode == null ? null : Modes.Get(mode)?.Tips;
+            if (tips == null || tips.Count == 0 || UnityEngine.Random.value >= 0.5f) return;
+            var label = _loadingScreen._root.Q<Label>("TipText");
+            var wrapper = _loadingScreen._root.Q<VisualElement>("TipWrapper");
+            if (label == null || wrapper == null) return;
+            label.text = _loc.T(tips[UnityEngine.Random.Range(0, tips.Count)]);
+            wrapper.style.display = DisplayStyle.Flex;
         }
     }
 }

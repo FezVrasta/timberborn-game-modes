@@ -23,6 +23,8 @@ namespace GameModes
         // each the path of an image file, or null for none (see Modes.SetBackground)
         public Func<string> MenuPicture;
         public Func<string> LoadingPicture;
+        // Localization keys of the hints the loading screen of a game in it shows (see Modes.AddTips)
+        public readonly List<string> Tips = new();
 
         public string Label(ILoc loc) => loc.T(LabelLocKey);
 
@@ -124,6 +126,15 @@ namespace GameModes
             if (Get(id) is not { } mode) return;
             mode.MenuPicture = menu;
             mode.LoadingPicture = loading;
+        }
+
+        /**
+         * Hints for the loading screen of a game in a mode, as localization keys. Half the time the loading
+         * screen shows one of these instead of the game's own hint, so a mode's hints are about the mode.
+         */
+        public static void AddTips(string id, params string[] locKeys)
+        {
+            if (Get(id) is { } mode) mode.Tips.AddRange(locKeys);
         }
 
         public static GameMode Get(string id) => All.FirstOrDefault(m => m.Id == id);
