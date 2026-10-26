@@ -45,6 +45,12 @@ Modes.SetBackground("mymod.race", menu: () => pathToJpg, loading: () => pathToJp
 
 Each is a function returning an image file's path when the screen shows (null for none), so the picture can change with the date or a setting. `Backgrounds.Show(element, path)` puts a picture on a screen's background element yourself, for screens a mod draws over (a hosting box, say). See [Samples/HelloMode](Samples/HelloMode).
 
+A world can have a loading picture of its own, whatever the mode: name the singletons that make a map or save one of yours, as they're written in the world. It goes over the mode's picture. A mod that doesn't depend on Game Modes can find `Modes.SetLoadingPictureForWorlds` by reflection.
+
+```csharp
+Modes.SetLoadingPictureForWorlds(() => pathToJpg, new[] { "MyMod.IslandLayout" });
+```
+
 ## Loading screen hints
 
 A game's loading screen shows one of the game's own hints. A mode can add hints of its own, as localization keys, and half the time the loading screen picks one of those instead:
