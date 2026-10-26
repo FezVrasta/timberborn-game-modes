@@ -1,3 +1,7 @@
+v1.1.0-1.4.0
+1.1.0-1.4.0
+* A game mode can have its own loading screen hints, and they can depend on the world being played.
+
 v1.1.0-1.3.0
 * A game mode can have its own picture behind the New Game screens and the loading screen of its games.
 * A mod can say which game mode comes up first.
