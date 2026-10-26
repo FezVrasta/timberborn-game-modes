@@ -23,6 +23,7 @@ namespace GameModes
         private class ForWorld
         {
             public string[] Keys, Singletons;
+            public Func<string> Picture;
         }
 
         private static readonly List<ForWorld> ForWorlds = new();
@@ -30,8 +31,14 @@ namespace GameModes
         // The hints that apply to the world about to load
         internal static List<string> NextWorld = new();
 
+        // The picture of the world about to load, over its mode's
+        internal static string NextWorldPicture;
+
         internal static void Add(string[] locKeys, string[] singletons) =>
             ForWorlds.Add(new ForWorld { Keys = locKeys, Singletons = singletons });
+
+        internal static void AddPicture(Func<string> picture, string[] singletons) =>
+            ForWorlds.Add(new ForWorld { Keys = new string[0], Singletons = singletons, Picture = picture });
 
         /** The hints a game in a mode, in the world about to load, can show. */
         internal static List<string> Pool(string mode)
@@ -45,6 +52,7 @@ namespace GameModes
         internal static void WorldLoading(Func<Stream> open)
         {
             NextWorld = new List<string>();
+            NextWorldPicture = null;
             if (ForWorlds.Count == 0 || open == null) return;
             try
             {
@@ -56,7 +64,11 @@ namespace GameModes
                 using var reader = new StreamReader(entry.Open());
                 string world = reader.ReadToEnd();
                 foreach (ForWorld tips in ForWorlds)
-                    if (tips.Singletons.Any(s => world.Contains($"\"{s}\""))) NextWorld.AddRange(tips.Keys);
+                    if (tips.Singletons.Any(s => world.Contains($"\"{s}\"")))
+                    {
+                        NextWorld.AddRange(tips.Keys);
+                        NextWorldPicture ??= tips.Picture?.Invoke();
+                    }
             }
             catch (Exception e)
             {

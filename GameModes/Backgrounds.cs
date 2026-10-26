@@ -167,7 +167,7 @@ namespace GameModes
             string mode = Backgrounds.NextLoadMode;
             Backgrounds.NextLoadMode = null;
             ShowTip(mode);
-            string path = Backgrounds.LoadingPicture(mode);
+            string path = LoadingTips.NextWorldPicture ?? Backgrounds.LoadingPicture(mode);
             // Other games keep what the game just set: clearing it would drop the game's own picture
             if (path == null) return;
             Debug.Log($"[GameModes] Loading screen: the picture of {mode}");

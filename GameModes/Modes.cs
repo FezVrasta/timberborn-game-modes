@@ -144,6 +144,14 @@ namespace GameModes
          */
         public static void AddTipsForWorlds(string[] locKeys, string[] singletonNames) => LoadingTips.Add(locKeys, singletonNames);
 
+        /**
+         * The picture behind the loading screen of any game whose map or save holds one of the singletons named,
+         * as an image file's path, or null for none. It goes over the mode's own (see SetBackground). A mod that
+         * doesn't depend on Game Modes finds this by reflection.
+         */
+        public static void SetLoadingPictureForWorlds(Func<string> picture, string[] singletonNames) =>
+            LoadingTips.AddPicture(picture, singletonNames);
+
         public static GameMode Get(string id) => All.FirstOrDefault(m => m.Id == id);
 
         public static void Describe(string id, string descriptionLocKey)
