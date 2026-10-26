@@ -174,11 +174,12 @@ namespace GameModes
             Backgrounds.Show(Backgrounds.BackgroundIn(_loadingScreen._root), path);
         }
 
-        // Half the time, a hint of the mode takes the place of the game's
+        // Half the time, a hint of the mode or of the world takes the place of the game's
         private void ShowTip(string mode)
         {
-            var tips = mode == null ? null : Modes.Get(mode)?.Tips;
-            if (tips == null || tips.Count == 0 || UnityEngine.Random.value >= 0.5f) return;
+            var tips = LoadingTips.Pool(mode);
+            LoadingTips.NextWorld = new List<string>();
+            if (tips.Count == 0 || UnityEngine.Random.value >= 0.5f) return;
             var label = _loadingScreen._root.Q<Label>("TipText");
             var wrapper = _loadingScreen._root.Q<VisualElement>("TipWrapper");
             if (label == null || wrapper == null) return;

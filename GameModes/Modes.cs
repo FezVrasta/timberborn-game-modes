@@ -137,6 +137,13 @@ namespace GameModes
             if (Get(id) is { } mode) mode.Tips.AddRange(locKeys);
         }
 
+        /**
+         * Hints for the loading screen of any game, in any mode, whose map or save holds one of the singletons
+         * named (as they're written in the world: "Archipelago.IslandLayout"). They're mixed with the mode's
+         * own hints. A mod that doesn't depend on Game Modes finds this by reflection.
+         */
+        public static void AddTipsForWorlds(string[] locKeys, string[] singletonNames) => LoadingTips.Add(locKeys, singletonNames);
+
         public static GameMode Get(string id) => All.FirstOrDefault(m => m.Id == id);
 
         public static void Describe(string id, string descriptionLocKey)
