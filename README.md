@@ -45,6 +45,22 @@ Modes.SetBackground("mymod.race", menu: () => pathToJpg, loading: () => pathToJp
 
 Each is a function returning an image file's path when the screen shows (null for none), so the picture can change with the date or a setting. `Backgrounds.Show(element, path)` puts a picture on a screen's background element yourself, for screens a mod draws over (a hosting box, say). See [Samples/HelloMode](Samples/HelloMode).
 
+## Loading screen hints
+
+A game's loading screen shows one of the game's own hints. A mode can add hints of its own, as localization keys, and half the time the loading screen picks one of those instead:
+
+```csharp
+Modes.AddTips("mymod.race", "MyMod.Tip.Pace", "MyMod.Tip.Finish");
+```
+
+Hints can also depend on the world, whatever the mode. Name the singletons that make a world one of your mod's, as they're written in its map or save, and a game loading a map or save that holds one can show the hints:
+
+```csharp
+Modes.AddTipsForWorlds(new[] { "MyMod.Tip.Islands" }, new[] { "MyMod.IslandLayout" });
+```
+
+The mode's hints and the world's share one pool. A mod that doesn't depend on Game Modes can find `Modes.AddTipsForWorlds` by reflection.
+
 ## Game settings
 
 Rules a mod adds to the New Game screens' Customize list (a toggle, a choice, a slider, a list), picked when the game is created and saved with it. Define them once, typed, under your own heading:
