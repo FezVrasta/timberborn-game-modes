@@ -69,6 +69,8 @@
     </ItemGroup>
     <RemoveDir Directories="$(VersionOutputPath)" />
     <MakeDir Directories="$(VersionOutputPath)" />
+    <!-- The manifest only carries major.minor (a different manifest version makes the game warn on every save); the real version is here and in the DLL -->
+    <WriteLinesToFile File="$(VersionOutputPath)version.txt" Lines="$(Version)" Overwrite="true" />
     <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(VersionOutputPath)" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(LocalizationFileToCopy)" DestinationFolder="$(VersionOutputPath)Localizations" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(RootDirFilesToCopy)" DestinationFolder="$(ModPath)" SkipUnchangedFiles="true" />
