@@ -1,3 +1,7 @@
+v1.1.0-1.5.0
+1.1.0-1.5.0
+* Mods can give the loading screen and the lobby a picture of their own for the maps they add, and hints that go with them.
+
 v1.1.0-1.4.0
 1.1.0-1.4.0
 * A game mode can have its own loading screen hints, and they can depend on the world being played.
