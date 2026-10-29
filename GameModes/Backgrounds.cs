@@ -31,6 +31,19 @@ namespace GameModes
         /** The picture behind the loading screen of a game in a mode, as a file's path, or null. */
         public static string LoadingPicture(string mode) => mode == null ? null : Modes.Get(mode)?.LoadingPicture?.Invoke();
 
+        /** The picture of the world that loaded last (an archipelago map's, say), over its mode's, or null. */
+        public static string WorldPicture => LoadingTips.NextWorldPicture;
+
+        /** What tells the world that loaded last apart, for a host to send its guests (see WorldFromHost), or null. */
+        public static string WorldKey => LoadingTips.NextWorldKey;
+
+        /** A guest's world is the host's: the picture its own copy of the mod gives that world, over the mode's. */
+        public static void WorldFromHost(string key)
+        {
+            LoadingTips.NextWorldKey = key;
+            LoadingTips.NextWorldPicture = LoadingTips.PictureFor(key);
+        }
+
         /** The texture of an image file, kept for the rest of the session. */
         public static Texture2D Picture(string path)
         {

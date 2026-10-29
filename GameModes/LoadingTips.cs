@@ -34,6 +34,12 @@ namespace GameModes
         // The picture of the world about to load, over its mode's
         internal static string NextWorldPicture;
 
+        // The singleton that made the world one with that picture: what a host tells its guests, who find the picture in their own copy of the mod
+        internal static string NextWorldKey;
+
+        internal static string PictureFor(string key) =>
+            key == null ? null : ForWorlds.FirstOrDefault(w => w.Picture != null && w.Singletons.Contains(key))?.Picture();
+
         internal static void Add(string[] locKeys, string[] singletons) =>
             ForWorlds.Add(new ForWorld { Keys = locKeys, Singletons = singletons });
 
@@ -53,6 +59,7 @@ namespace GameModes
         {
             NextWorld = new List<string>();
             NextWorldPicture = null;
+            NextWorldKey = null;
             if (ForWorlds.Count == 0 || open == null) return;
             try
             {
@@ -67,7 +74,11 @@ namespace GameModes
                     if (tips.Singletons.Any(s => world.Contains($"\"{s}\"")))
                     {
                         NextWorld.AddRange(tips.Keys);
-                        NextWorldPicture ??= tips.Picture?.Invoke();
+                        if (NextWorldPicture == null && tips.Picture != null)
+                        {
+                            NextWorldPicture = tips.Picture();
+                            NextWorldKey = tips.Singletons.First(s => world.Contains($"\"{s}\""));
+                        }
                     }
             }
             catch (Exception e)
