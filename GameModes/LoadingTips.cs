@@ -60,7 +60,8 @@ namespace GameModes
             NextWorld = new List<string>();
             NextWorldPicture = null;
             NextWorldKey = null;
-            if (ForWorlds.Count == 0 || open == null) return;
+            MapKinds.WorldLoading(null);
+            if (open == null) return;
             try
             {
                 using Stream stream = open();
@@ -70,6 +71,8 @@ namespace GameModes
                 if (entry == null) return;
                 using var reader = new StreamReader(entry.Open());
                 string world = reader.ReadToEnd();
+                // What kinds of map it is, for the blueprints' WhenSpecs (see MapKinds)
+                MapKinds.WorldLoading(world);
                 foreach (ForWorld tips in ForWorlds)
                     if (tips.Singletons.Any(s => world.Contains($"\"{s}\"")))
                     {

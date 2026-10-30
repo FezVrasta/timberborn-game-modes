@@ -143,9 +143,10 @@ namespace GameModes
         /**
          * Sets every setting with presets to its value for a difficulty the player has just picked.
          * Picking the one already applied leaves the settings as they are, so the player's changes
-         * to them stay when the screen is opened again.
+         * to them stay when the screen is opened again. The New Game screen calls it as a difficulty is
+         * picked; a game started without the screen (a test harness) calls it itself.
          */
-        internal static void ApplyPresets(string difficulty)
+        public static void ApplyPresets(string difficulty)
         {
             if (difficulty == null || Restoring || PlayerPrefs.GetString(PresetDifficultyKey, null) == difficulty) return;
             PlayerPrefs.SetString(PresetDifficultyKey, difficulty);
