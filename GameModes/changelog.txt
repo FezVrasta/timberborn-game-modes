@@ -1,3 +1,8 @@
+v1.1.0-1.6.0
+1.1.0-1.6.0
+* Mods can add things to their buildings, goods and crops in some game modes or on some kinds of map only.
+* Saves no longer warn about a different Game Modes version after a small update.
+
 v1.1.0-1.5.0
 1.1.0-1.5.0
 * Mods can give the loading screen and the lobby a picture of their own for the maps they add, and hints that go with them.
