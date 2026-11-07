@@ -1,3 +1,7 @@
+v1.1.0-1.6.1
+1.1.0-1.6.1
+* No more crash when another mod opens the New Game panel during a game.
+
 v1.1.0-1.6.0
 1.1.0-1.6.0
 * Mods can add things to their buildings, goods and crops in some game modes or on some kinds of map only.
