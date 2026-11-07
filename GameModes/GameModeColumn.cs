@@ -27,7 +27,7 @@ namespace GameModes
      *
      * Other mods' columns of the same kind are built with Column and Button.
      */
-    public class GameModeColumn
+    public class GameModeColumn : Timberborn.SingletonSystem.IUnloadableSingleton
     {
         public const string ContainerName = "GameModesColumn";
         // The difficulties' own look: their buttons, the selected one, and their scrolling list
@@ -37,6 +37,12 @@ namespace GameModes
         private const int DetailsWidth = 280;
 
         internal static GameModeColumn Instance { get; private set; }
+
+        // Gone with the main menu: a New Game panel a mod opens in a game (Edit Save Difficulty) gets no column
+        public void Unload()
+        {
+            if (Instance == this) Instance = null;
+        }
 
         private readonly VisualElementLoader _visualElementLoader;
         private readonly ILoc _loc;

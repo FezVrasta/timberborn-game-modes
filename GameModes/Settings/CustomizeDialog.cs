@@ -30,7 +30,7 @@ namespace GameModes
      * settings that apply to the game being made show. Closing it puts the
      * list back, hidden, where the game keeps reading it from.
      */
-    public class CustomizeDialog
+    public class CustomizeDialog : Timberborn.SingletonSystem.IUnloadableSingleton
     {
         public const string DialogName = "GameModesCustomize";
         public const string RulesName = "GameModesSettings";
@@ -53,6 +53,15 @@ namespace GameModes
             _ui = new SettingsUi(loc, tooltipRegistrar, visualElementLoader);
             _dialogBoxShower = dialogBoxShower;
             Instance = this;
+        }
+
+        // Gone with the main menu: a mod that opens a New Game panel in a game (Edit Save Difficulty) gets the game's
+        // own Customize there, not the main menu's dialog, whose panel stack is gone
+        public void Unload()
+        {
+            if (Instance != this) return;
+            Instance = null;
+            Debug.Log("[GameSettings] Customize dialog gone with the main menu");
         }
 
         // The settings shown depend on the mode: subscribed once, to the dialog the menu has now
